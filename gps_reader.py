@@ -5,7 +5,7 @@ import rospy
 from sensor_msgs.msg import NavSatFix
 
 # Replace '/dev/tty.usbmodem1101' with your actual port
-SERIAL_PORT = 'COM3'
+SERIAL_PORT = '/dev/ttyACM0'
 BAUD_RATE = 9600
 
 
@@ -55,7 +55,7 @@ class GPSReader():
                 rospy.loginfo("Connected to GPS...")
                 time.sleep(2)  # Wait for the GPS to warm up
 
-                while rospy.is_shutdown() is not False:
+                while rospy.is_shutdown() is False:
                     line = ser.readline().decode('ascii', errors='ignore').strip()
                     if line.startswith('$GNRMC'):
                         self.parse_gprmc(line)
