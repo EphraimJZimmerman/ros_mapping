@@ -30,6 +30,7 @@ class GPSReader():
             gps_msg = NavSatFix()
             gps_msg.latitude = self.convert_to_decimal_degrees(lat)
             gps_msg.longitude = self.convert_to_decimal_degrees(lon)
+            gps_msg.header.frame_id = 'base_footprint'
             self.gps_coord_pub.publish(gps_msg)
 
             # print(f"Time (UTC): {time_utc}")
