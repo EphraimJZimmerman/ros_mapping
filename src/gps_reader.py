@@ -15,7 +15,7 @@ class GPSReader():
 
     def parse_gprmc(self, data):
         parts = data.split(',')
-        if parts[0] == '$GNRMC' and len(parts) > 9:
+        if len(parts) > 9 and parts[0] == '$GNRMC':
             # I commented out the stuff we don't need for now, but might want to add to the message later
             # time_utc = parts[1]
             # status = parts[2]
