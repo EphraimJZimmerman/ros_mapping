@@ -50,7 +50,8 @@ magnetic_declination_radians: 0
 
 yaw_offset: 0 
 
-broadcast_utm_transform: true # Makes positive y axis face north and positive x axist face east
+# broadcast_utm_transform: true # Makes positive y axis face north and positive x axist face east
+broadcast_cartesian_transform: true
 publish_filtered_gps: true
 
 
