@@ -1,0 +1,17 @@
+<launch>
+  <arg name="fox" default="false" doc="enable foxglove"/>
+  <arg name="slam" default="false" doc="enable for slam run"/>
+  <arg name="joy" default="false" doc="enable joystick"/>
+  <arg name="nav" default="false" doc="setup for navigation"/>
+  <arg name="camera" default="true" doc="enable camera"/>
+  <arg name="fid" default="false" doc="enable fiducial aruco detect"/>
+  
+  <include file="$(find ros_mapping)/launch/include/mini.launch" />
+  <include file="$(find ros_mapping)/launch/include/lidar.launch" />
+  <include file="$(find ros_mapping)/launch/include/joystick.launch" if="$(arg joy)" />
+  <include file="$(find ros_mapping)/launch/include/camera.launch" if="$(arg camera)" />
+  <include file="$(find ros_mapping)/launch/include/aruco_detect.launch" if="$(arg fid)"/>
+  <include file="$(find ros_mapping)/launch/include/foxglove.launch" if="$(arg fox)" />
+  <include file="$(find ros_mapping)/launch/include/slam.launch"  if="$(arg slam)" />
+  <include file="$(find ros_mapping)/launch/include/navigate.launch"  if="$(arg nav)" />
+</launch>
