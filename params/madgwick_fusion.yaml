@@ -1,6 +1,6 @@
 fixed_frame: base_footprint
-use_mag: true
+use_mag: false
 publish_tf: false
-use_magnetic_field_msg: true
+use_magnetic_field_msg: false
 world_frame: enu
 orientation_stddev: 0.05
