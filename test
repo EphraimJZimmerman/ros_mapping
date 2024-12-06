@@ -1,0 +1,17 @@
+header: 
+  seq: 39764
+  stamp: 
+    secs: 1733429076
+    nsecs: 718480825
+  frame_id: "base_footprint"
+status: 
+  status: 2
+  service: 0
+latitude: 42.36611559256811
+longitude: -71.25910761411711
+altitude: 0.0
+position_covariance: [1765.0906677425482, 1973.2688763289011, 0.0, 1973.2688763287522, 2436.7365178731934, 0.0, 0.0, 0.0, 0.001845773669186257]
+position_covariance_type: 3
+---
+
+/home/ubuntu/catkin_ws/src/gpg_bran4/imu_calib/src/apply_calib.cpp
