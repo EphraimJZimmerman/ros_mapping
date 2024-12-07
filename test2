@@ -1,0 +1,15 @@
+header: 
+  seq: 11537
+  stamp: 
+    secs: 1733605020
+    nsecs:  41437387
+  frame_id: "base_footprint"
+status: 
+  status: 2
+  service: 0
+latitude: 42.36601724395168
+longitude: -71.2590642747087
+altitude: 0.0
+position_covariance: [4345.5348074857975, -8046.5064874902055, 0.0, -8046.506487490232, 16966.648324166435, 0.0, 0.0, 0.0, 0.0013088963008214829]
+position_covariance_type: 3
+---

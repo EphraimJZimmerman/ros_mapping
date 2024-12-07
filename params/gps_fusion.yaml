@@ -15,9 +15,9 @@ diagnostics_agg: true
 
 # Might want to fiddle with velocity vs just x and y positions with odom
 odom0: /odom
-odom0_config: [false, false, false,
+odom0_config: [true, true, false,
                false, false, false,
-               true, true, false,
+               false, false, false,
                false, false, true,
                false, false, false]
 
@@ -30,7 +30,7 @@ imu0: /imu/data
 # the most likely candidate is the x'' (acceleration) fr$
 # Just set it to false! (It's the first entry on the las$
 imu0_config: [false, false, false,
-              false, false, true,
+              false, false, false,
               false, false, false,
               false, false, true,
               false, false, false]
