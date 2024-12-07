@@ -4,6 +4,7 @@ import rospy
 from sensor_msgs.msg import Imu
 from nav_msgs.msg import Odometry
 from tf.transformations import euler_from_quaternion
+from std_msgs.msg import Float64
 
 
 class ImuConverter():
