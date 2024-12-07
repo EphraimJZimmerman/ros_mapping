@@ -14,6 +14,8 @@ class ImuConverter():
         self.imu_sub = rospy.Subscriber(
             '/odom', Odometry, callback=self.odom_cb)
 
+        self.imu_pub = rospy.Publisher('/imu/yaw', Float64, queue_size=1)
+
         self.odom_yaw = 0
         self.imu_yaw = 0
 
@@ -22,6 +24,7 @@ class ImuConverter():
                         msg.orientation.z, msg.orientation.w]
         (roll, pitch, yaw) = euler_from_quaternion(orientations)
         self.imu_yaw = yaw
+        self.imu_pub.publish(self.imu_yaw)
 
     def odom_cb(self, msg):
         orientation = msg.pose.pose.orientation
