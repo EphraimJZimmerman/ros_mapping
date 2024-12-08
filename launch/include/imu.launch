@@ -7,7 +7,7 @@
 
     <!-- IMU Magnometer corrector based on previous calibration values. Publishes corrected magnometer values-->
     <node pkg="ros_mapping" type="mag_corrector.py" name="mag_corrector" respawn="false">
-    	<param name="calibration_file_path" value="$(find ros_mapping)/params/magnetometer_calibration.pickle" />
+    	<param name="calibration_file_path" value="wowowoowow" />
     </node>
 
     <!-- Filter and fuse raw imu data -->
