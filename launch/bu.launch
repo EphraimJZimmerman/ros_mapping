@@ -14,4 +14,5 @@
   <include file="$(find ros_mapping)/launch/include/foxglove.launch" if="$(arg fox)" />
   <include file="$(find ros_mapping)/launch/include/slam.launch"  if="$(arg slam)" />
   <include file="$(find ros_mapping)/launch/include/navigate.launch"  if="$(arg nav)" />
+  <include file="$(find ros_mapping)/launch/include/gps.launch"/>
 </launch>

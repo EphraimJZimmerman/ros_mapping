@@ -5,9 +5,6 @@
         <param name="calibrate_gyros" value="true" />
     </node>
 
-    <!-- IMU Magnometer corrector based on previous calibration values. Publishes corrected magnometer values-->
-    <node pkg="ros_mapping" type="mag_corrector.py" name="mag_corrector" respawn="false"/>
-
     <!-- Filter and fuse raw imu data -->
     <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter_madgwick" output="screen" respawn="false" >
 	    <rosparam command="load" file="$(find ros_mapping)/params/madgwick_fusion.yaml" />
