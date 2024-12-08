@@ -8,9 +8,9 @@ import rospy
 # Function to load calibration parameters
 
 
-def load_calibration_params():
+def load_calibration_params(calibration_file_path):
     try:
-        with open('magnetometer_calibration.pickle', 'rb') as f:
+        with open(calibration_file_path, 'rb') as f:
             return pickle.load(f)
     except FileNotFoundError:
         print("No calibration file found. Proceeding with uncalibrated data.")
@@ -79,8 +79,11 @@ def mag_callback(msg, calibration_params):
 # Initialize ROS node
 rospy.init_node('magnetometer_calibration')
 
+calibration_file = rospy.get_param(
+    'calibration_file_path', default='magnetometer_calibration.pickle')
+print(calibration_file)
 # Load calibration parameters
-calibration_params = load_calibration_params()
+calibration_params = load_calibration_params(calibration_file)
 
 # Create a publisher for the corrected magnetometer data
 mag_pub = rospy.Publisher('/imu/mag_corrected', MagneticField, queue_size=10)
