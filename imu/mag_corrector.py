@@ -81,7 +81,7 @@ def mag_callback(msg, calibration_params):
 rospy.init_node('magnetometer_calibration')
 
 calibration_file = rospy.get_param(
-    'calibration_file_path', default='magnetometer_calibration.pickle')
+    '~calibration_file_path', default='magnetometer_calibration.pickle')
 print(calibration_file)
 # Load calibration parameters
 calibration_params = load_calibration_params(calibration_file)
