@@ -1,0 +1,5 @@
+<launch>
+    <!-- Read raw data from the GPS and publish it to a ros topic-->
+    <node pkg="ros_mapping" type="gps_reader.py" name="gps_reader" respawn="false"/>
+
+</launch>

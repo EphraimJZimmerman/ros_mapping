@@ -31,7 +31,7 @@ def magnetic_callback(msg):
 
 def magnetic_orientation():
     rospy.init_node('magnetic_orientation', anonymous=True)
-    rospy.Subscriber("/imu/mag", MagneticField, magnetic_callback)
+    rospy.Subscriber("/imu/mag_corrected", MagneticField, magnetic_callback)
     rospy.spin()
 
 
