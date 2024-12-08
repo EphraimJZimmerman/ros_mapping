@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#! /usr/bin/python3
 import numpy as np
 import pickle
 from sensor_msgs.msg import MagneticField
