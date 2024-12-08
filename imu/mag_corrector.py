@@ -72,7 +72,7 @@ def mag_callback(msg, calibration_params):
     # Create a new message to publish the corrected data
     corrected_mag_msg = MagneticField()
     corrected_mag_msg.magnetic_field = Vector3(*corrected_mag_data)
-    corrected_mag_msg.header.stamp.set(rospy.Time.now())
+    corrected_mag_msg.header.stamp = rospy.Time.now()
     # Need to set up the header properly with a timestamp here maybe
 
     # Publish the corrected data
