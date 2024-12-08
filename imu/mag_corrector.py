@@ -13,8 +13,9 @@ def load_calibration_params(calibration_file_path):
         with open(calibration_file_path, 'rb') as f:
             return pickle.load(f)
     except FileNotFoundError:
-        print("No calibration file found. Proceeding with uncalibrated data.")
-        return None
+        rospy.logerr(
+            f"[Mag Corrector] No calibration file found. Current calibration file path is ${calibration_file_path}")
+        exit()
 
 
 def get_hard_soft_iron_params(ellipse_params):
