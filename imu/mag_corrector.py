@@ -5,8 +5,11 @@ from geometry_msgs.msg import Vector3
 import rospy
 
 # Calibration Params
-OFFSETS = [-10, -31, -31]
-SCALES = [1.074074, 0.966667, 0.966667]
+OFFSETS = [-11, -34, -34]
+SCALES = [1.039216, 0.981481, 0.981481]
+
+# OFFSETS = [-10, -31, -31]
+# SCALES = [1.074074, 0.966667, 0.966667]
 
 
 def apply_calibration(raw_mag_data, offsets, scales):

@@ -34,8 +34,9 @@ class MagneticComparer():
         self.mag_x = []
         self.mag_y = []
         self.mag_z = []
+        print(f"x,y,z")
 
-        while rospy.is_shutdown is False and self.mag_x == 0:
+        while rospy.is_shutdown is False and self.mag_x == []:
             continue
         while rospy.is_shutdown() is False:
             # print(f" Mag : {self.mag_x}, {self.mag_y} || Imu: {self.e}, {self.n}")
