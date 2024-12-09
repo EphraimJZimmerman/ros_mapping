@@ -2,5 +2,5 @@ fixed_frame: base_footprint
 use_mag: true
 publish_tf: false
 use_magnetic_field_msg: true
-world_frame: ned
+world_frame: nwu
 orientation_stddev: 0.05

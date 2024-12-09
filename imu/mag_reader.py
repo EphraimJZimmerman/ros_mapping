@@ -5,13 +5,13 @@ import math
 
 
 def magnetic_callback(msg):
-    # Extract magnetic field components in ENU convention
-    Bx = msg.magnetic_field.x  # East component
-    By = msg.magnetic_field.y  # North component
+    # Extract magnetic field components in NED convention
+    Bx = msg.magnetic_field.x  # North South component
+    By = msg.magnetic_field.y  # East West component
 
     # Calculate the yaw angle (heading) in radians
     # yaw_radians = math.atan2(Bx, By)
-    yaw_radians = math.atan2(By, Bx)
+    yaw_radians = math.atan2(-By, Bx)
 
     # Convert radians to degrees and normalize to [0, 360)
     yaw_degrees = (math.degrees(yaw_radians) + 360) % 360
