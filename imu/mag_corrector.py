@@ -3,13 +3,24 @@ import numpy as np
 from sensor_msgs.msg import MagneticField
 from geometry_msgs.msg import Vector3
 import rospy
+from collections import deque
 
 # Calibration Params
-OFFSETS = [-11, -34, -34]
-SCALES = [1.039216, 0.981481, 0.981481]
 
+OFFSETS = [-12, -32, -32]
+SCALES = [1.080808, 0.963964, 0.963964]
+# OFFSETS = [-11, -34, -34]
+# SCALES = [1.039216, 0.981481, 0.981481]
 # OFFSETS = [-10, -31, -31]
 # SCALES = [1.074074, 0.966667, 0.966667]
+
+# Median Filter Params
+WINDOW_SIZE = 10
+
+# Create buffers for median filter
+x_buffer = deque(maxlen=WINDOW_SIZE)
+y_buffer = deque(maxlen=WINDOW_SIZE)
+z_buffer = deque(maxlen=WINDOW_SIZE)
 
 
 def apply_calibration(raw_mag_data, offsets, scales):
@@ -32,9 +43,16 @@ def mag_callback(msg):
 
     corrected_mag_data = apply_calibration(raw_mag_data, OFFSETS, SCALES)
 
+    x_buffer.append(corrected_mag_data[0])
+    y_buffer.append(corrected_mag_data[1])
+    z_buffer.append(corrected_mag_data[2])
+
+    filtered_data = (np.median(x_buffer), np.median(
+        y_buffer), np.median(z_buffer))
+
     # Create a new message to publish the corrected data
     corrected_mag_msg = MagneticField()
-    corrected_mag_msg.magnetic_field = Vector3(*corrected_mag_data)
+    corrected_mag_msg.magnetic_field = Vector3(*filtered_data)
     corrected_mag_msg.header = msg.header
 
     # Publish the corrected data
