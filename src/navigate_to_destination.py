@@ -27,7 +27,7 @@ def magnetic_callback(msg):
     By = msg.magnetic_field.y
     yaw_radians = math.atan2(By, Bx)
     current_yaw = (math.degrees(yaw_radians) + 360) % 360
-    rospy.loginfo(f"Updated Yaw: {current_yaw:.2f} degrees")
+    # rospy.loginfo(f"Updated Yaw: {current_yaw:.2f} degrees")
 
 
 class Graph:
@@ -196,6 +196,7 @@ def main():
     path = graph.bfs(closest_node, end_node)
 
     if path:
+        print("Path found")
         for i in range(len(path) - 1):
 
             current_node = path[i]
