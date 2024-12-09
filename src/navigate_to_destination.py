@@ -202,7 +202,7 @@ def main():
             current_node = path[i]
             next_node = path[i + 1]
 
-            # current_lat, current_lon = current_node
+            current_lat, current_lon = current_node
             next_lat, next_lon = next_node
 
             # Wait until the robot reaches the current node (within a small threshold distance)
