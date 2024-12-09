@@ -2,7 +2,19 @@ import rospy
 import math
 from collections import deque
 from std_msgs.msg import Float64
+from sensor_msgs.msg import MagneticField
 
+# Global variable to store the robot's yaw
+current_yaw = 0  # Default yaw
+
+# Magnetic field callback to update yaw
+def magnetic_callback(msg):
+    global current_yaw
+    Bx = msg.magnetic_field.x
+    By = msg.magnetic_field.y
+    yaw_radians = math.atan2(By, Bx)
+    current_yaw = (math.degrees(yaw_radians) + 360) % 360
+    rospy.loginfo(f"Updated Yaw: {current_yaw:.2f} degrees")
 
 class Graph:
     def __init__(self):
@@ -65,24 +77,7 @@ class Graph:
         turn_angle = (bearing_to_target - current_yaw + 180) % 360 - 180
 
         return bearing_to_target, turn_angle
-
-    # def get_edge_direction(self, current_lat, current_lon, current_yaw) -> tuple:
-    #     """Given the robot's current position and yaw, return the closest node and direction to the next node."""
-    #
-    #     closest_node = self.find_closest_node(current_lat, current_lon)
-    #     # Find the next node in the closest node's edge list
-    #
-    #     if self.edges[closest_node]:
-    #         next_node = self.edges[closest_node][0]
-    #         next_lat, next_lon = next_node
-    #         # Calculate the bearing (direction) from current node to the next node
-    #         bearing = self._calculate_bearing(current_lat, current_lon, next_lat, next_lon)
-    #
-    #         return closest_node, next_node, (bearing - current_yaw) % 360
-    #     else:
-    #         print(f"Error: No edges connected to node {closest_node}")
-    #         return None
-
+        
     def _calculate_bearing(self, lat1, lon1, lat2, lon2) -> float:
         """Calculate the bearing from point (lat1, lon1) to point (lat2, lon2)."""
 
@@ -129,6 +124,7 @@ def main():
     # ROS publishers for bearing and turn angle
     bearing_pub = rospy.Publisher('/robot/bearing', Float64, queue_size=10)
     turn_angle_pub = rospy.Publisher('/robot/turn_angle', Float64, queue_size=10)
+    rospy.Subscriber("/imu/mag_corrected", MagneticField, magnetic_callback)
 
     rate = rospy.Rate(1)  # Publish at 1 Hz
 
@@ -165,7 +161,7 @@ def main():
     graph.add_edge(locations["e"], locations["a"])
 
     # Starting point and target node, currently static
-    start_node = locations["a"]  # Robot's current location (node "g")
+    start_node = locations["a"]  # Robot's current location (node "a")
     end_node = locations["c"]  # Destination node ("c")
 
     # Localize the robot to the closest node
@@ -176,20 +172,27 @@ def main():
 
     if path:
         for i in range(len(path) - 1):
+            
             current_node = path[i]
             next_node = path[i + 1]
 
             current_lat, current_lon = current_node
             next_lat, next_lon = next_node
 
-            # Assuming robot's current yaw is aligned to north (0 degrees)
-            robot_yaw = 0
+            # Wait until the robot reaches the current node (within a small threshold distance)
+            threshold_distance = 1.0  # 1 meter threshold for arriving at a node
+            while graph._haversine_distance(current_lat, current_lon, current_lat, current_lon) > threshold_distance:
+                print("waiting to arrive")
+                rospy.sleep(0.1)  # Wait for the robot to reach the current node
 
-            # Calculate bearing and turn angle to next node
+            # Assuming robot's current yaw is updated from the magnetic field sensor
+            robot_yaw = current_yaw
+
+            # Calculate bearing and turn angle to the next node
             bearing_to_target, turn_angle = graph.get_edge_direction(current_lat, current_lon, robot_yaw, next_lat, next_lon)
 
-            # Publish bearing and turn angle
-            rospy.loginfo(f"Publishing bearing: {bearing_to_target}° and turn angle: {turn_angle}°")
+            # Publish bearing and turn angle for the next node
+            rospy.loginfo(f"Publishing bearing: {bearing_to_target} and turn angle: {turn_angle}")
             bearing_pub.publish(bearing_to_target)
             turn_angle_pub.publish(turn_angle)
 
