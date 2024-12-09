@@ -10,7 +10,7 @@ from std_msgs.msg import Float64
 class ImuConverter():
     def __init__(self):
         self.imu_sub = rospy.Subscriber(
-            '/imu/data', Imu, callback=self.imu_cb)
+            '/imu', Imu, callback=self.imu_cb)
 
         self.imu_sub = rospy.Subscriber(
             '/odom', Odometry, callback=self.odom_cb)

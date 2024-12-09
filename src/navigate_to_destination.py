@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 import rospy
 import math
 from collections import deque
@@ -9,13 +10,17 @@ current_yaw = 0  # Default yaw
 current_lat = None
 current_lon = None
 
+
 def gps_callback(msg):
     global current_lat, current_lon
     current_lat = msg.latitude
     current_lon = msg.longitude
-    rospy.loginfo(f"Updated GPS: Latitude = {current_lat}, Longitude = {current_lon}")
+    rospy.loginfo(
+        f"Updated GPS: Latitude = {current_lat}, Longitude = {current_lon}")
 
 # Magnetic field callback to update yaw
+
+
 def magnetic_callback(msg):
     global current_yaw
     Bx = msg.magnetic_field.x
@@ -23,6 +28,7 @@ def magnetic_callback(msg):
     yaw_radians = math.atan2(By, Bx)
     current_yaw = (math.degrees(yaw_radians) + 360) % 360
     rospy.loginfo(f"Updated Yaw: {current_yaw:.2f} degrees")
+
 
 class Graph:
     def __init__(self):
@@ -54,7 +60,8 @@ class Graph:
         phi2 = math.radians(lat2)
         delta_phi = math.radians(lat2 - lat1)
         delta_lambda = math.radians(lon2 - lon1)
-        a = math.sin(delta_phi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2) ** 2
+        a = math.sin(delta_phi / 2) ** 2 + math.cos(phi1) * \
+            math.cos(phi2) * math.sin(delta_lambda / 2) ** 2
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
         distance = R * c
         return distance
@@ -78,14 +85,15 @@ class Graph:
         to a target node and the necessary rotation to align the robot's yaw with that bearing.
         """
         # Calculate the bearing from current position to the target node
-        bearing_to_target = self._calculate_bearing(current_lat, current_lon, target_lat, target_lon)
+        bearing_to_target = self._calculate_bearing(
+            current_lat, current_lon, target_lat, target_lon)
 
         # Calculate how much the robot needs to turn from its current yaw to the bearing
         # Normalize the difference to be between -180 and 180 degrees
         turn_angle = (bearing_to_target - current_yaw + 180) % 360 - 180
 
         return bearing_to_target, turn_angle
-        
+
     def _calculate_bearing(self, lat1, lon1, lat2, lon2) -> float:
         """Calculate the bearing from point (lat1, lon1) to point (lat2, lon2)."""
 
@@ -93,7 +101,8 @@ class Graph:
         phi2 = math.radians(lat2)
         delta_lambda = math.radians(lon2 - lon1)
         x = math.sin(delta_lambda) * math.cos(phi2)
-        y = math.cos(phi1) * math.sin(phi2) - math.sin(phi1) * math.cos(phi2) * math.cos(delta_lambda)
+        y = math.cos(phi1) * math.sin(phi2) - math.sin(phi1) * \
+            math.cos(phi2) * math.cos(delta_lambda)
         initial_bearing = math.atan2(x, y)
 
         # Convert to degrees and normalize to 0-360 range
@@ -131,7 +140,8 @@ def main():
 
     # ROS publishers for bearing and turn angle
     bearing_pub = rospy.Publisher('/robot/bearing', Float64, queue_size=10)
-    turn_angle_pub = rospy.Publisher('/robot/turn_angle', Float64, queue_size=10)
+    turn_angle_pub = rospy.Publisher(
+        '/robot/turn_angle', Float64, queue_size=10)
     rospy.Subscriber("/imu/mag_corrected", MagneticField, magnetic_callback)
 
     rospy.Subscriber("/imu/mag_corrected", MagneticField, magnetic_callback)
@@ -187,7 +197,7 @@ def main():
 
     if path:
         for i in range(len(path) - 1):
-            
+
             current_node = path[i]
             next_node = path[i + 1]
 
@@ -198,20 +208,24 @@ def main():
             threshold_distance = 1.0  # 1 meter threshold for arriving at a node
             while graph._haversine_distance(current_lat, current_lon, current_lat, current_lon) > threshold_distance:
                 print("waiting to arrive")
-                rospy.sleep(0.1)  # Wait for the robot to reach the current node
+                # Wait for the robot to reach the current node
+                rospy.sleep(0.1)
 
             # Assuming robot's current yaw is updated from the magnetic field sensor
             robot_yaw = current_yaw
 
             # Calculate bearing and turn angle to the next node
-            bearing_to_target, turn_angle = graph.get_edge_direction(current_lat, current_lon, robot_yaw, next_lat, next_lon)
+            bearing_to_target, turn_angle = graph.get_edge_direction(
+                current_lat, current_lon, robot_yaw, next_lat, next_lon)
 
             # Publish bearing and turn angle for the next node
-            rospy.loginfo(f"Publishing bearing: {bearing_to_target} and turn angle: {turn_angle}")
+            rospy.loginfo(
+                f"Publishing bearing: {bearing_to_target} and turn angle: {turn_angle}")
             bearing_pub.publish(bearing_to_target)
             turn_angle_pub.publish(turn_angle)
 
             rate.sleep()  # Sleep to maintain the desired publishing rate
+
 
 if __name__ == '__main__':
     try:
