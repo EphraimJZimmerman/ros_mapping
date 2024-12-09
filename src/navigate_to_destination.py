@@ -2,10 +2,18 @@ import rospy
 import math
 from collections import deque
 from std_msgs.msg import Float64
-from sensor_msgs.msg import MagneticField
+from sensor_msgs.msg import MagneticField, NavSatFix
 
-# Global variable to store the robot's yaw
+# Global variables to store the robot's yaw and GPS coordinates
 current_yaw = 0  # Default yaw
+current_lat = None
+current_lon = None
+
+def gps_callback(msg):
+    global current_lat, current_lon
+    current_lat = msg.latitude
+    current_lon = msg.longitude
+    rospy.loginfo(f"Updated GPS: Latitude = {current_lat}, Longitude = {current_lon}")
 
 # Magnetic field callback to update yaw
 def magnetic_callback(msg):
@@ -126,6 +134,9 @@ def main():
     turn_angle_pub = rospy.Publisher('/robot/turn_angle', Float64, queue_size=10)
     rospy.Subscriber("/imu/mag_corrected", MagneticField, magnetic_callback)
 
+    rospy.Subscriber("/imu/mag_corrected", MagneticField, magnetic_callback)
+    rospy.Subscriber("/gps", NavSatFix, gps_callback)
+
     rate = rospy.Rate(1)  # Publish at 1 Hz
 
     # Define locations for nodes a to j
@@ -164,6 +175,10 @@ def main():
     start_node = locations["a"]  # Robot's current location (node "a")
     end_node = locations["c"]  # Destination node ("c")
 
+    if current_lat is None or current_lon is None:
+        rospy.logwarn("Waiting for GPS fix...")
+        rospy.wait_for_message("/gps", NavSatFix)
+
     # Localize the robot to the closest node
     closest_node = graph.find_closest_node(start_node[0], start_node[1])
 
@@ -176,7 +191,7 @@ def main():
             current_node = path[i]
             next_node = path[i + 1]
 
-            current_lat, current_lon = current_node
+            # current_lat, current_lon = current_node
             next_lat, next_lon = next_node
 
             # Wait until the robot reaches the current node (within a small threshold distance)
