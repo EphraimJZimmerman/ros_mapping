@@ -15,7 +15,7 @@ SCALES = [1.080808, 0.963964, 0.963964]
 # SCALES = [1.074074, 0.966667, 0.966667]
 
 # Median Filter Params
-WINDOW_SIZE = 10
+WINDOW_SIZE = 20
 
 # Create buffers for median filter
 x_buffer = deque(maxlen=WINDOW_SIZE)

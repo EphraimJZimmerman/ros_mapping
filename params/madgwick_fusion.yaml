@@ -4,3 +4,5 @@ publish_tf: false
 use_magnetic_field_msg: true
 world_frame: nwu
 orientation_stddev: 0.1
+stateless: true
+remove_gravity_vector: false
