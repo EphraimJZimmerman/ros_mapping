@@ -44,15 +44,17 @@ class ImuFollower:
         return
 
     def imu_cb(self, msg):
-        # Extract magnetic field components in NWU convention
-        Bx = msg.magnetic_field.x  # East component
-        By = msg.magnetic_field.y  # North component
+        # Extract magnetic field components in ENU convention
+        # Extract magnetic field components in NED convention
+        Bx = msg.magnetic_field.x  # North South component
+        By = msg.magnetic_field.y  # East West component
 
-        # Calculate the yaw angle (heading) in radians
-        # yaw_radians = math.atan2(Bx, By)
-        yaw_radians = math.atan2(By, Bx)
-        # msg = float(msg)
-        self.cur_yaw = self.convertNegativeAngles(yaw_radians)
+    # Calculate the yaw angle (heading) in radians
+    # yaw_radians = math.atan2(Bx, By)
+        self.cur_yaw = math.atan2(-By, Bx)
+
+    # Convert radians to degrees and normalize to [0, 360)
+        # yaw_degrees = (math.degrees(yaw_radians) + 360) % 360
 
     def follow_direction(self, target_yaw):
         rate = rospy.Rate(10)
@@ -124,16 +126,15 @@ class ImuFollower:
     def difference_from_target(self, cur_yaw, target_yaw):
         '''finds shortest turning amount to get to target(avoid PID freaking out from wrapping from 6.14 to 0 or vice versa)'''
         if cur_yaw <= target_yaw:
-            left = target_yaw - cur_yaw
-            right = -(cur_yaw + (2*math.pi - target_yaw))
+            right_turn = -(target_yaw - cur_yaw)
+            left_turn = (cur_yaw + (2*math.pi - target_yaw))
         elif cur_yaw > target_yaw:
-            right = target_yaw - cur_yaw
-            left = target_yaw + (2*math.pi - cur_yaw)
-
-        if abs(right) <= abs(left):
-            return right
+            left_turn = -(target_yaw - cur_yaw)
+            right_turn = -(target_yaw + (2*math.pi - cur_yaw))
+        if abs(right_turn) <= abs(left_turn):
+            return right_turn
         else:
-            return left
+            return left_turn
 
     # FIX LATER
     # doesn't work because of noise if on the boundary of closest distance being positive vs negative
