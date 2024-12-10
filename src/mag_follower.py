@@ -30,6 +30,7 @@ class ImuFollower:
         
 
     def bearing_cb(self, msg):
+        print("callback: " +str(msg.data))
         self.cur_target_yaw = self.convertNegativeAngles(msg.data * (math.pi/180))
         if self.cur_target_yaw != self.prev_target_yaw:
             self.follow_direction(self.cur_target_yaw)
