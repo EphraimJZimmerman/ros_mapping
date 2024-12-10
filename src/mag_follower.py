@@ -63,7 +63,7 @@ class ImuFollower:
             cur_dist = -1*self.difference_from_target(self.cur_yaw, target_yaw)
             twist.angular.z = self.pid.compute(0, cur_dist)
             print("Target yaw: ", str(target_yaw))
-            #self.cmd_vel_pub.publish(twist)
+            self.cmd_vel_pub.publish(twist)
             # print("Current dist: ", str(-1*cur_dist))
             # print("turn: " + str(twist.angular.z))
             rate.sleep()
@@ -99,7 +99,7 @@ class ImuFollower:
                 headingTwist.angular.z = 0.2 * (cur_dist/abs(cur_dist))
             else:
                 headingTwist.angular.z = 0.5 * cur_dist #add a more balanced turning method?
-            #self.cmd_vel_pub.publish(headingTwist)
+            self.cmd_vel_pub.publish(headingTwist)
             while self.cur_yaw == None:
                 continue #waiting for new odometry values
             prev_dist = cur_dist
