@@ -6,7 +6,7 @@ import numpy as np
 from matplotlib.colors import LinearSegmentedColormap
 from io import StringIO
 
-DATA_FILE = "magnetometer_outside.csv"
+DATA_FILE = "magnetometer_outside.csv"  # Change this to your actual file name
 
 # Be sure to remove your outliers and check the data to see if it looks correct. ideally there should not any dots far from the "circles".
 # Percentage of outliers to remove from the top of the data, increase adjust until you data looks cleaned.

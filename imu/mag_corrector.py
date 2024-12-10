@@ -5,12 +5,15 @@ from geometry_msgs.msg import Vector3
 import rospy
 from collections import deque
 
-# Calibration Params
-
+'''Calibration Params'''
+# Replace with the offset values you get from calibration_plotter.py
 OFFSETS = [-13, -33, -33]
+# Replace with the scale values you get from calibration_plotter.py
 SCALES = [1.083333, 0.962963, 0.962963]
 
-# Median Filter Params
+''' Median Filter Params '''
+# Adjust this to increase the buffer size for the median filter.
+# Increasing will reduce noise, decreasing will increase noise.
 WINDOW_SIZE = 20
 
 # Create buffers for median filter
@@ -20,19 +23,23 @@ z_buffer = deque(maxlen=WINDOW_SIZE)
 
 
 def apply_calibration(raw_mag_data, offsets, scales):
-    # Apply hard-iron correction (subtract the offset)
+    '''
+        Apply soft and hard iron correction to the raw data and return the 
+        corrected data
+    '''
+    # Apply hard-iron correction
     corrected_data = np.array(raw_mag_data) - np.array(offsets)
 
-    # Apply soft-iron correction (matrix multiplication)
+    # Apply soft-iron correction
     corrected_data = corrected_data / np.array(scales)
 
-    # Return the corrected data
     return corrected_data
-
-# ROS Subscriber callback to apply calibration and publish corrected data
 
 
 def mag_callback(msg):
+    '''
+        ROS Subscriber callback to apply calibration and publish corrected data
+    '''
     # Extract magnetometer data from the message
     raw_mag_data = np.array(
         [msg.magnetic_field.x, msg.magnetic_field.y, msg.magnetic_field.z])
