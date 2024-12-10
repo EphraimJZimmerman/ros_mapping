@@ -7,12 +7,8 @@ from collections import deque
 
 # Calibration Params
 
-OFFSETS = [-12, -32, -32]
-SCALES = [1.080808, 0.963964, 0.963964]
-# OFFSETS = [-11, -34, -34]
-# SCALES = [1.039216, 0.981481, 0.981481]
-# OFFSETS = [-10, -31, -31]
-# SCALES = [1.074074, 0.966667, 0.966667]
+OFFSETS = [-13, -33, -33]
+SCALES = [1.083333, 0.962963, 0.962963]
 
 # Median Filter Params
 WINDOW_SIZE = 20

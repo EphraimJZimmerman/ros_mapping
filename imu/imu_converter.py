@@ -5,12 +5,13 @@ from sensor_msgs.msg import Imu
 from nav_msgs.msg import Odometry
 from tf.transformations import euler_from_quaternion
 from std_msgs.msg import Float64
+import math
 
 
 class ImuConverter():
     def __init__(self):
         self.imu_sub = rospy.Subscriber(
-            '/imu', Imu, callback=self.imu_cb)
+            '/imu/data', Imu, callback=self.imu_cb)
 
         self.imu_sub = rospy.Subscriber(
             '/odom', Odometry, callback=self.odom_cb)
@@ -24,7 +25,7 @@ class ImuConverter():
         orientations = [msg.orientation.x, msg.orientation.y,
                         msg.orientation.z, msg.orientation.w]
         (roll, pitch, yaw) = euler_from_quaternion(orientations)
-        self.imu_yaw = yaw
+        self.imu_yaw = math.degrees(yaw)
         self.imu_pub.publish(self.imu_yaw)
 
     def odom_cb(self, msg):

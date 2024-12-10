@@ -26,7 +26,8 @@ def magnetic_callback(msg):
     else:
         direction = "North"
 
-    rospy.loginfo(f"Yaw: {yaw_degrees:.2f} degrees, Facing: {direction}")
+    rospy.loginfo(
+        f"Yaw: {yaw_degrees:.2f} degrees ({yaw_radians : .2f} radians), Facing: {direction}")
 
 
 def magnetic_orientation():
