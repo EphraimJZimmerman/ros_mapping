@@ -14,13 +14,13 @@ from tf.transformations import euler_from_quaternion
 TOLERANCE_AGAINST_ERROR = 0.0001
 TURN_ANGLE_TOLERANCE = 0.01
 MIN_TURN_SPEED = 0.2
-FORWARD_SPEED = 0.3
+FORWARD_SPEED = 1
 MAGNETIC_DECLINATION_DEGREES = 13.98
 
 class ImuFollower:
     def __init__(self):
         self.cur_yaw = None
-        self.pid = PID(-0.6,0.6,0.8,0.1,3) 
+        self.pid = PID(-0.6,0.6,1,0.1,5) 
         self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
         self.bearing_sub = rospy.Subscriber('/robot/bearing', Float64, self.bearing_cb)
         self.turn_angle_sub = rospy.Subscriber('/robot/turn_angle', Float64, self.turn_angle_cb)
@@ -145,7 +145,10 @@ class ImuFollower:
     #FIX LATER
     #doesn't work because of noise if on the boundary of closest distance being positive vs negative
     def completed_rotation(self, prev_dist, cur_dist):
-        if prev_dist <=0 and cur_dist >=0:
+        #allowing 180 degree turns
+        if math.isclose(abs(self.cur_yaw - self.target_yaw), math.pi, abs_tol=0.15):
+            return False
+        elif prev_dist <=0 and cur_dist >=0:
             return True
         elif prev_dist >=0 and cur_dist <=0:
             return True
