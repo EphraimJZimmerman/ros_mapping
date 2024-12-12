@@ -62,14 +62,8 @@ def mag_callback(msg):
     mag_pub.publish(corrected_mag_msg)
 
 
-# Initialize ROS node
+# Run the actual node
 rospy.init_node('magnetometer_calibration')
-
-# Create a publisher for the corrected magnetometer data
 mag_pub = rospy.Publisher('/imu/mag_corrected', MagneticField, queue_size=10)
-
-# Subscribe to the original magnetometer topic
 rospy.Subscriber('/imu/mag', MagneticField, mag_callback)
-
-# Spin to keep the node running
 rospy.spin()
