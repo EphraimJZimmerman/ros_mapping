@@ -192,16 +192,20 @@ def main():
 
     # Localize the robot to the closest node
     closest_node = graph.find_closest_node(start_node[0], start_node[1])
+    rospy.loginfo("closest node right now:", closest_node)
     
-
     # Find the shortest path using BFS
     path = graph.bfs(closest_node, end_node)
+    rospy.loginfo("path to follow:", path)
+
 
     if path:
         for i in range(len(path) - 1):
 
             current_node = path[i]
+            rospy.loginfo("current node:", current_node)
             next_node = path[i + 1]
+            rospy.loginfo("next node:", next_node)
 
             # current_lat, current_lon = current_node
             next_lat, next_lon = next_node
@@ -213,7 +217,7 @@ def main():
                 current_lat, current_lon, robot_yaw, next_lat, next_lon)
 
             # Wait until the robot reaches the current node (within a small threshold distance)
-            threshold_distance = 2.0  # 3 meter threshold for arriving at a node
+            threshold_distance = 3.0  # 3 meter threshold for arriving at a node
             rospy.loginfo(f"Distance to next node is {graph._haversine_distance(current_lat, current_lon, current_lat, current_lon)}")
             while graph._haversine_distance(current_lat, current_lon, next_lat, next_lon) > threshold_distance:
                 # Publish bearing and turn angle for the next node
@@ -224,7 +228,6 @@ def main():
 
                 # Wait for the robot to reach the current node
                 rospy.sleep(0.1)
-
                 rate.sleep()  # Sleep to maintain the desired publishing rate
 
 
