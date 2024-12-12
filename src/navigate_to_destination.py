@@ -186,7 +186,7 @@ def main():
 
     # Starting point and target node, currently static
     start_node = locations["a"]  # Robot's current location (node "a")
-    end_node = locations["c"]  # Destination node ("c")
+    end_node = locations["g"]  # Destination node ("c")
 
     if current_lat is None or current_lon is None:
         rospy.logwarn("Waiting for GPS fix...")
