@@ -146,7 +146,7 @@ class ImuFollower:
     #doesn't work because of noise if on the boundary of closest distance being positive vs negative
     def completed_rotation(self, prev_dist, cur_dist):
         #allowing 180 degree turns
-        if math.isclose(abs(self.cur_yaw - self.target_yaw), math.pi, abs_tol=0.15):
+        if math.isclose(abs(self.cur_yaw - self.cur_target_yaw), math.pi, abs_tol=0.15):
             return False
         elif prev_dist <=0 and cur_dist >=0:
             return True
