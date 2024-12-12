@@ -3,6 +3,8 @@ import rospy
 from sensor_msgs.msg import MagneticField
 import math
 
+MAGNETIC_DECLINATION_DEGREES = 13.98
+
 
 def magnetic_callback(msg):
     '''
@@ -30,7 +32,7 @@ def magnetic_callback(msg):
         direction = "North"
 
     rospy.loginfo(
-        f"Yaw: {yaw_degrees:.2f} degrees ({yaw_radians : .2f} radians), Facing: {direction}")
+        f"Yaw: {yaw_degrees:.2f} degrees, {yaw_degrees - MAGNETIC_DECLINATION_DEGREES: .2f} degrees (with magnetic declination) , ({yaw_radians : .2f} radians), Facing: {direction}")
 
 
 def magnetic_orientation():
