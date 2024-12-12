@@ -158,7 +158,8 @@ def main():
         "e": (42.365863, -71.259289),
         "f": (42.365817, -71.259402),
         "g": (42.365782, -71.259501),
-        "h": (42.365840, -71.259627)
+        "h": (42.365840, -71.259627),
+        "i": (42.365930, -71.259768)
     }
 
 
@@ -173,6 +174,7 @@ def main():
     graph.add_edge(locations["e"], locations["f"])
     graph.add_edge(locations["f"], locations["g"])
     graph.add_edge(locations["g"], locations["h"])
+    graph.add_edge(locations["h"], locations["i"])
     # graph.add_edge(locations["g"], locations["a"])
     # graph.add_edge(locations["f"], locations["i"])
     # graph.add_edge(locations["i"], locations["d"])
@@ -184,7 +186,7 @@ def main():
 
     # Starting point and target node, currently static
     start_node = locations["a"]  # Robot's current location (node "a")
-    end_node = locations["h"]  # Destination node ("c")
+    end_node = locations["i"]  # Destination node ("c")
 
     if current_lat is None or current_lon is None:
         rospy.logwarn("Waiting for GPS fix...")
