@@ -149,41 +149,42 @@ def main():
 
     rate = rospy.Rate(1)  # Publish at 1 Hz
 
-    # Define locations for nodes a to j
+   
     locations = {
-        "a": (42.365901, -71.259747),
-        "b": (42.365823, -71.259422),
-        "c": (42.366028, -71.258998),
-        "f": (42.366346, -71.259256),
-        "d": (42.366097, -71.259606),
-        "e": (42.366149, -71.259970),
-        "g": (42.366016, -71.259441),
-        "h": (42.366278, -71.259214),
-        "i": (42.366260, -71.259564),
-        "j": (42.365874, -71.259272)
+        "a": (42.366033, -71.258990),
+        "b": (42.366016, -71.259070),
+        "c": (42.365931, -71.259125),
+        "d": (42.365899, -71.259205),
+        "e": (42.365863, -71.259289),
+        "f": (42.365817, -71.259402),
+        "g": (42.365782, -71.259501),
+        "h": (42.365840, -71.259627)
     }
+
 
     graph = Graph()
     for loc in locations.values():
         graph.add_node(loc[0], loc[1])
 
     graph.add_edge(locations["a"], locations["b"])
-    graph.add_edge(locations["b"], locations["j"])
-    graph.add_edge(locations["j"], locations["c"])
-    graph.add_edge(locations["c"], locations["h"])
-    graph.add_edge(locations["h"], locations["f"])
-    graph.add_edge(locations["h"], locations["g"])
-    graph.add_edge(locations["g"], locations["a"])
-    graph.add_edge(locations["f"], locations["i"])
-    graph.add_edge(locations["i"], locations["d"])
-    graph.add_edge(locations["d"], locations["a"])
-    graph.add_edge(locations["f"], locations["i"])
-    graph.add_edge(locations["i"], locations["e"])
-    graph.add_edge(locations["e"], locations["a"])
+    graph.add_edge(locations["b"], locations["c"])
+    graph.add_edge(locations["c"], locations["d"])
+    graph.add_edge(locations["d"], locations["e"])
+    graph.add_edge(locations["e"], locations["f"])
+    graph.add_edge(locations["f"], locations["g"])
+    graph.add_edge(locations["g"], locations["h"])
+    # graph.add_edge(locations["g"], locations["a"])
+    # graph.add_edge(locations["f"], locations["i"])
+    # graph.add_edge(locations["i"], locations["d"])
+    # graph.add_edge(locations["d"], locations["a"])
+    # graph.add_edge(locations["f"], locations["i"])
+    # graph.add_edge(locations["i"], locations["e"])
+    # graph.add_edge(locations["e"], locations["a"])
+
 
     # Starting point and target node, currently static
-    start_node = locations["c"]  # Robot's current location (node "a")
-    end_node = locations["a"]  # Destination node ("c")
+    start_node = locations["a"]  # Robot's current location (node "a")
+    end_node = locations["h"]  # Destination node ("c")
 
     if current_lat is None or current_lon is None:
         rospy.logwarn("Waiting for GPS fix...")
@@ -191,16 +192,20 @@ def main():
 
     # Localize the robot to the closest node
     closest_node = graph.find_closest_node(start_node[0], start_node[1])
-
+    rospy.loginfo(f"closest node right now {closest_node}")
+    
     # Find the shortest path using BFS
     path = graph.bfs(closest_node, end_node)
+    rospy.loginfo(f"path to follow: {path}")
+
 
     if path:
-        print("Path found")
         for i in range(len(path) - 1):
 
             current_node = path[i]
+            rospy.loginfo(f"current node: {current_node}")
             next_node = path[i + 1]
+            rospy.loginfo(f"next node: {next_node}")
 
             # current_lat, current_lon = current_node
             next_lat, next_lon = next_node
@@ -212,11 +217,9 @@ def main():
                 current_lat, current_lon, robot_yaw, next_lat, next_lon)
 
             # Wait until the robot reaches the current node (within a small threshold distance)
-            threshold_distance = 1.0  # 1 meter threshold for arriving at a node
-            print(
-                f"Distance to next node is {graph._haversine_distance(current_lat, current_lon, current_lat, current_lon)}")
+            threshold_distance = 3.0  # 3 meter threshold for arriving at a node
+            rospy.loginfo(f"Distance to next node is {graph._haversine_distance(current_lat, current_lon, current_lat, current_lon)}")
             while graph._haversine_distance(current_lat, current_lon, next_lat, next_lon) > threshold_distance:
-                print("waiting to arrive")
                 # Publish bearing and turn angle for the next node
                 rospy.loginfo(
                     f"Publishing bearing: {bearing_to_target} and turn angle: {turn_angle}")
@@ -225,7 +228,6 @@ def main():
 
                 # Wait for the robot to reach the current node
                 rospy.sleep(0.1)
-
                 rate.sleep()  # Sleep to maintain the desired publishing rate
 
 
