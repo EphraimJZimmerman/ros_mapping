@@ -150,7 +150,7 @@ def main():
     rate = rospy.Rate(1)  # Publish at 1 Hz
 
    
-       locations = {
+    locations = {
         "a": (42.366033, -71.258990),
         "b": (42.366016, -71.259070),
         "c": (42.365931, -71.259125),
