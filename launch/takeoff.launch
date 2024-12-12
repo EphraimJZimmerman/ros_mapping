@@ -3,6 +3,6 @@
   <node pkg="ros_mapping" type="navigate_to_destination.py" name="robot_navigation" respawn="true">
   </node>
 
-  <node pkg="ros_mapping" type="mag_follower.py" name="mag_follower.py" respawn="true">
+  <node pkg="ros_mapping" type="mag_follower.py" name="mag_follower" respawn="true">
   </node>
 </launch>
