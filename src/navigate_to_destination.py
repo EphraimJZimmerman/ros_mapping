@@ -233,6 +233,55 @@ def main():
                 rate.sleep()  # Sleep to maintain the desired publishing rate
 
 
+    # Starting point and target node, currently static
+    start_node = locations["i"]  # Robot's current location (node "a")
+    end_node = locations["a"]  # Destination node ("c")
+
+    if current_lat is None or current_lon is None:
+        rospy.logwarn("Waiting for GPS fix...")
+        rospy.wait_for_message("/gps", NavSatFix)
+
+    # Localize the robot to the closest node
+    closest_node = graph.find_closest_node(start_node[0], start_node[1])
+    rospy.loginfo(f"closest node right now {closest_node}")
+    
+    # Find the shortest path using BFS
+    path = graph.bfs(closest_node, end_node)
+    rospy.loginfo(f"path to follow: {path}")
+
+    if path:
+        for i in range(len(path) - 1):
+
+            current_node = path[i]
+            rospy.loginfo(f"current node: {current_node}")
+            next_node = path[i + 1]
+            rospy.loginfo(f"next node: {next_node}")
+
+            # current_lat, current_lon = current_node
+            next_lat, next_lon = next_node
+            # Assuming robot's current yaw is updated from the magnetic field sensor
+            robot_yaw = current_yaw
+
+            # Calculate bearing and turn angle to the next node
+            bearing_to_target, turn_angle = graph.get_edge_direction(
+                current_lat, current_lon, robot_yaw, next_lat, next_lon)
+
+            # Wait until the robot reaches the current node (within a small threshold distance)
+            threshold_distance = 3.0  # 3 meter threshold for arriving at a node
+            rospy.loginfo(f"Distance to next node is {graph._haversine_distance(current_lat, current_lon, current_lat, current_lon)}")
+            while graph._haversine_distance(current_lat, current_lon, next_lat, next_lon) > threshold_distance:
+                # Publish bearing and turn angle for the next node
+                rospy.loginfo(
+                    f"Publishing bearing: {bearing_to_target} and turn angle: {turn_angle}")
+                bearing_pub.publish(bearing_to_target)
+                turn_angle_pub.publish(turn_angle)
+
+                # Wait for the robot to reach the current node
+                rospy.sleep(0.1)
+                rate.sleep()  # Sleep to maintain the desired publishing rate
+
+
+
 if __name__ == '__main__':
     try:
         main()
