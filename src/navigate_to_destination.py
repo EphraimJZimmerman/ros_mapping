@@ -140,36 +140,49 @@ def main():
     rate = rospy.Rate(1)  # Publish at 1 Hz
 
     # Define locations for nodes a to j
-    locations = {
-        "a": (42.365901, -71.259747),
-        "b": (42.365823, -71.259422),
-        "c": (42.366028, -71.258998),
-        "f": (42.366346, -71.259256),
-        "d": (42.366097, -71.259606),
-        "e": (42.366149, -71.259970),
-        "g": (42.366016, -71.259441),
-        "h": (42.366278, -71.259214),
-        "i": (42.366260, -71.259564),
-        "j": (42.365874, -71.259272)
+    # locations = {
+    #     "a": (42.365901, -71.259747),
+    #     "b": (42.365823, -71.259422),
+    #     "c": (42.366028, -71.258998),
+    #     "f": (42.366346, -71.259256),
+    #     "d": (42.366097, -71.259606),
+    #     "e": (42.366149, -71.259970),
+    #     "g": (42.366016, -71.259441),
+    #     "h": (42.366278, -71.259214),
+    #     "i": (42.366260, -71.259564),
+    #     "j": (42.365874, -71.259272)
+    # }
+
+# new locations on line from SCC
+
+       locations = {
+        "a": (42.366013, -71.259072),
+        "b": (42.365921, -71.259129),
+        "c": (42.365882, -71.259238),
+        "d": (42.365850, -71.259308),
+        "e": (42.365814, -71.259397),
+        "f": (42.365770, -71.259504),
+        "g": (42.365862, -71.259636)
     }
+
 
     graph = Graph()
     for loc in locations.values():
         graph.add_node(loc[0], loc[1])
 
     graph.add_edge(locations["a"], locations["b"])
-    graph.add_edge(locations["b"], locations["j"])
-    graph.add_edge(locations["j"], locations["c"])
-    graph.add_edge(locations["c"], locations["h"])
-    graph.add_edge(locations["h"], locations["f"])
-    graph.add_edge(locations["h"], locations["g"])
-    graph.add_edge(locations["g"], locations["a"])
-    graph.add_edge(locations["f"], locations["i"])
-    graph.add_edge(locations["i"], locations["d"])
-    graph.add_edge(locations["d"], locations["a"])
-    graph.add_edge(locations["f"], locations["i"])
-    graph.add_edge(locations["i"], locations["e"])
-    graph.add_edge(locations["e"], locations["a"])
+    graph.add_edge(locations["b"], locations["c"])
+    graph.add_edge(locations["c"], locations["d"])
+    graph.add_edge(locations["d"], locations["e"])
+    graph.add_edge(locations["e"], locations["f"])
+    graph.add_edge(locations["f"], locations["g"])
+    # graph.add_edge(locations["g"], locations["a"])
+    # graph.add_edge(locations["f"], locations["i"])
+    # graph.add_edge(locations["i"], locations["d"])
+    # graph.add_edge(locations["d"], locations["a"])
+    # graph.add_edge(locations["f"], locations["i"])
+    # graph.add_edge(locations["i"], locations["e"])
+    # graph.add_edge(locations["e"], locations["a"])
 
     # Starting point and target node, currently static
     start_node = locations["a"]  # Robot's current location (node "a")
