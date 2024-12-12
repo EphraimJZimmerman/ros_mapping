@@ -14,7 +14,7 @@ SCALES = [1.083333, 0.962963, 0.962963]
 ''' Median Filter Params '''
 # Adjust this to increase the buffer size for the median filter.
 # Increasing will reduce noise, decreasing will increase noise.
-WINDOW_SIZE = 20
+WINDOW_SIZE = 7
 
 # Create buffers for median filter
 x_buffer = deque(maxlen=WINDOW_SIZE)
