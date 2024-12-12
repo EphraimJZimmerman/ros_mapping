@@ -60,6 +60,7 @@ class ImuFollower:
         # yaw_degrees = (math.degrees(yaw_radians) + 360) % 360
 
     def follow_direction(self, target_yaw):
+        self.cmd_vel_pub.publish(Twist())
         rate = rospy.Rate(10)
         self.turn_to_heading(target_yaw, 1)
         while not rospy.is_shutdown():
