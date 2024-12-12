@@ -183,8 +183,8 @@ def main():
 
 
     # Starting point and target node, currently static
-    start_node = locations["c"]  # Robot's current location (node "a")
-    end_node = locations["a"]  # Destination node ("c")
+    start_node = locations["a"]  # Robot's current location (node "a")
+    end_node = locations["h"]  # Destination node ("c")
 
     if current_lat is None or current_lon is None:
         rospy.logwarn("Waiting for GPS fix...")
@@ -192,12 +192,12 @@ def main():
 
     # Localize the robot to the closest node
     closest_node = graph.find_closest_node(start_node[0], start_node[1])
+    
 
     # Find the shortest path using BFS
     path = graph.bfs(closest_node, end_node)
 
     if path:
-        print("Path found")
         for i in range(len(path) - 1):
 
             current_node = path[i]
@@ -213,11 +213,9 @@ def main():
                 current_lat, current_lon, robot_yaw, next_lat, next_lon)
 
             # Wait until the robot reaches the current node (within a small threshold distance)
-            threshold_distance = 1.0  # 1 meter threshold for arriving at a node
-            print(
-                f"Distance to next node is {graph._haversine_distance(current_lat, current_lon, current_lat, current_lon)}")
+            threshold_distance = 2.0  # 3 meter threshold for arriving at a node
+            rospy.loginfo(f"Distance to next node is {graph._haversine_distance(current_lat, current_lon, current_lat, current_lon)}")
             while graph._haversine_distance(current_lat, current_lon, next_lat, next_lon) > threshold_distance:
-                print("waiting to arrive")
                 # Publish bearing and turn angle for the next node
                 rospy.loginfo(
                     f"Publishing bearing: {bearing_to_target} and turn angle: {turn_angle}")
