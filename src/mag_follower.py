@@ -72,8 +72,8 @@ class ImuFollower:
             twist.angular.z = self.pid.compute(0, cur_dist)
             print("Target yaw: ", str(target_yaw))
             self.cmd_vel_pub.publish(twist)
-            # print("Current dist: ", str(-1*cur_dist))
-            # print("turn: " + str(twist.angular.z))
+            print("Current dist: ", str(-1*cur_dist))
+            print("turn: " + str(twist.angular.z))
             rate.sleep()
 
     def turn_to_heading(self, target_yaw, base_vel):
