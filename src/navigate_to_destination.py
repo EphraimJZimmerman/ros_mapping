@@ -208,7 +208,7 @@ def main():
             next_lat, next_lon = next_node
 
             # Wait until the robot reaches the current node (within a small threshold distance)
-            threshold_distance = 1.0  # 1 meter threshold for arriving at a node
+            threshold_distance = 3.0  # 1 meter threshold for arriving at a node
             while graph._haversine_distance(current_lat, current_lon, current_lat, current_lon) > threshold_distance:
                 print("waiting to arrive")
                 rospy.sleep(0.1)  # Wait for the robot to reach the current node
