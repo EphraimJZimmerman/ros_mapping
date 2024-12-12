@@ -156,13 +156,14 @@ def main():
 # new locations on line from SCC
 
        locations = {
-        "a": (42.366013, -71.259072),
-        "b": (42.365921, -71.259129),
-        "c": (42.365882, -71.259238),
-        "d": (42.365850, -71.259308),
-        "e": (42.365814, -71.259397),
-        "f": (42.365770, -71.259504),
-        "g": (42.365862, -71.259636)
+        "a": (42.366033, -71.258990),
+        "b": (42.366016, -71.259070),
+        "c": (42.365931, -71.259125),
+        "d": (42.365899, -71.259205),
+        "e": (42.365863, -71.259289),
+        "f": (42.365817, -71.259402),
+        "g": (42.365782, -71.259501),
+        "h": (42.365840, -71.259627)
     }
 
 
@@ -176,6 +177,7 @@ def main():
     graph.add_edge(locations["d"], locations["e"])
     graph.add_edge(locations["e"], locations["f"])
     graph.add_edge(locations["f"], locations["g"])
+    graph.add_edge(locations["g"], locations["h"])
     # graph.add_edge(locations["g"], locations["a"])
     # graph.add_edge(locations["f"], locations["i"])
     # graph.add_edge(locations["i"], locations["d"])
@@ -186,7 +188,7 @@ def main():
 
     # Starting point and target node, currently static
     start_node = locations["a"]  # Robot's current location (node "a")
-    end_node = locations["g"]  # Destination node ("c")
+    end_node = locations["h"]  # Destination node ("c")
 
     if current_lat is None or current_lon is None:
         rospy.logwarn("Waiting for GPS fix...")
