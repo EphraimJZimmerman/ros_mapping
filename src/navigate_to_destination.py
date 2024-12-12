@@ -192,20 +192,20 @@ def main():
 
     # Localize the robot to the closest node
     closest_node = graph.find_closest_node(start_node[0], start_node[1])
-    rospy.loginfo("closest node right now:", closest_node)
+    rospy.loginfo(f"closest node right now {closest_node}")
     
     # Find the shortest path using BFS
     path = graph.bfs(closest_node, end_node)
-    rospy.loginfo("path to follow:", path)
+    rospy.loginfo(f"path to follow: {path}")
 
 
     if path:
         for i in range(len(path) - 1):
 
             current_node = path[i]
-            rospy.loginfo("current node:", current_node)
+            rospy.loginfo(f"current node: {current_node}")
             next_node = path[i + 1]
-            rospy.loginfo("next node:", next_node)
+            rospy.loginfo(f"next node: {next_node}")
 
             # current_lat, current_lon = current_node
             next_lat, next_lon = next_node
